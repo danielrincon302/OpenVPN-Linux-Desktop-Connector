@@ -1072,25 +1072,38 @@ class VentanaVPN(Gtk.Window):
         self.label_archivo_seleccionado.set_max_width_chars(30)
         hbox_archivo.pack_start(self.label_archivo_seleccionado, True, True, 0)
 
-        # Contenedor horizontal para botón conectar y semáforo
+        # Contenedor horizontal para botón conectar
         hbox_controles = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         hbox_controles.set_halign(Gtk.Align.FILL)
         hbox_controles.set_margin_start(10)
         hbox_controles.set_margin_end(10)
         vbox.pack_start(hbox_controles, False, False, 0)
 
-        # Botón combinado conectar/desconectar
-        self.boton_conectar_desconectar = Gtk.Button(label=self.t('btn_connect'))
+        # Botón combinado conectar/desconectar con ícono dentro
+        self.boton_conectar_desconectar = Gtk.Button()
         self.boton_conectar_desconectar.set_size_request(-1, 40)  # -1 permite expansión horizontal
         self.boton_conectar_desconectar.connect("clicked", self.on_toggle_conexion_clicked)
-        hbox_controles.pack_start(self.boton_conectar_desconectar, True, True, 0)
 
-        # Semáforo de estado (candado - inicialmente rojo - desconectado)
+        # Contenedor interno del botón con texto e ícono
+        boton_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        boton_box.set_halign(Gtk.Align.CENTER)
+        boton_box.set_valign(Gtk.Align.CENTER)
+
+        # Label del botón
+        self.boton_label = Gtk.Label(label=self.t('btn_connect'))
+        self.boton_label.set_valign(Gtk.Align.BASELINE)
+        boton_box.pack_start(self.boton_label, False, False, 0)
+
+        # Semáforo de estado (candado) junto al texto
         self.semaforo_image = Gtk.Image()
-        red_icon_path = os.path.join(os.path.dirname(__file__), "icons", "red.fw.png")
-        self.semaforo_image.set_from_file(red_icon_path)
-        self.semaforo_image.set_size_request(40, 40)
-        hbox_controles.pack_start(self.semaforo_image, False, False, 0)
+        icon_path = self.obtener_icono_por_tema('desconectado')
+        self.semaforo_image.set_from_file(icon_path)
+        self.semaforo_image.set_size_request(16, 16)
+        self.semaforo_image.set_valign(Gtk.Align.BASELINE)
+        boton_box.pack_start(self.semaforo_image, False, False, 0)
+
+        self.boton_conectar_desconectar.add(boton_box)
+        hbox_controles.pack_start(self.boton_conectar_desconectar, True, True, 0)
 
         # Variable para rastrear el estado de conexión
         self.conectado = False
@@ -1226,6 +1239,12 @@ class VentanaVPN(Gtk.Window):
         self.guardar_tema()
         self.aplicar_tema(codigo_tema)
         self.actualizar_marcador_tema()
+
+        # Actualizar ícono del botón según el nuevo tema y estado actual
+        if self.conectado:
+            self.actualizar_semaforo('conectado')
+        else:
+            self.actualizar_semaforo('desconectado')
 
     def cargar_config_tls(self):
         """Carga la configuración de TLS desde el archivo"""
@@ -2038,9 +2057,9 @@ class VentanaVPN(Gtk.Window):
 
         # Actualizar etiqueta del botón según el estado actual
         if self.conectado:
-            self.boton_conectar_desconectar.set_label(self.t('btn_disconnect'))
+            self.boton_label.set_text(self.t('btn_disconnect'))
         else:
-            self.boton_conectar_desconectar.set_label(self.t('btn_connect'))
+            self.boton_label.set_text(self.t('btn_connect'))
 
         # Actualizar semáforo según el estado actual
         if self.conectado:
@@ -2195,7 +2214,7 @@ class VentanaVPN(Gtk.Window):
         self.actualizar_semaforo('conectando')
 
         # Estado: Conectando - Cambiar botón a "Conectando VPN"
-        self.boton_conectar_desconectar.set_label(self.t('btn_connecting'))
+        self.boton_label.set_text(self.t('btn_connecting'))
         self.conectado = True
 
         # Ejecutar en un hilo separado
@@ -2209,7 +2228,7 @@ class VentanaVPN(Gtk.Window):
             self.actualizar_semaforo('desconectando')
 
             # Cambiar botón a "Desconectando VPN" y deshabilitar
-            self.boton_conectar_desconectar.set_label(self.t('btn_disconnecting'))
+            self.boton_label.set_text(self.t('btn_disconnecting'))
             self.boton_conectar_desconectar.set_sensitive(False)
 
             try:
@@ -2409,7 +2428,7 @@ class VentanaVPN(Gtk.Window):
 
     def actualizar_estado_conectado(self):
         # Estado: Conectado - Cambiar botón a "Desconectar"
-        self.boton_conectar_desconectar.set_label(self.t('btn_disconnect'))
+        self.boton_label.set_text(self.t('btn_disconnect'))
         self.boton_conectar_desconectar.set_sensitive(True)
         self.conectado = True
         self.actualizar_semaforo('conectado')
@@ -2494,25 +2513,38 @@ class VentanaVPN(Gtk.Window):
         self.textview.scroll_to_mark(mark, 0.0, False, 0.0, 0.0)
         return False
 
+    def obtener_icono_por_tema(self, estado):
+        """Obtiene el path del ícono correcto según el tema actual y el estado
+        Estados: 'conectado', 'desconectado', 'conectando', 'desconectando'
+        """
+        # Determinar prefijo según tema
+        if self.tema_actual in ['managerial', 'minimalist']:
+            prefijo = 'B'  # Íconos negros
+        else:  # 'modern' y 'solar'
+            prefijo = 'W'  # Íconos blancos
+
+        # Determinar nombre del archivo según estado
+        if estado == 'conectado':
+            nombre_archivo = f"{prefijo}CandadoConectado16x16.svg"
+        elif estado in ['conectando', 'desconectando']:
+            nombre_archivo = f"{prefijo}CandadoDesConectado16x16.svg"
+        else:  # desconectado
+            nombre_archivo = f"{prefijo}CandadoDesConectado16x16.svg"
+
+        return os.path.join(os.path.dirname(__file__), "icons", nombre_archivo)
+
     def actualizar_semaforo(self, estado):
         """Actualiza el semáforo según el estado de la conexión
         Estados: 'conectado', 'desconectado', 'conectando', 'desconectando'
         """
-        if estado == 'conectado':
-            icon_path = os.path.join(os.path.dirname(__file__), "icons", "green.fw.png")
-            self.semaforo_image.set_from_file(icon_path)
-        elif estado in ['conectando', 'desconectando']:
-            icon_path = os.path.join(os.path.dirname(__file__), "icons", "yellow.fw.png")
-            self.semaforo_image.set_from_file(icon_path)
-        else:  # desconectado
-            icon_path = os.path.join(os.path.dirname(__file__), "icons", "red.fw.png")
-            self.semaforo_image.set_from_file(icon_path)
+        icon_path = self.obtener_icono_por_tema(estado)
+        self.semaforo_image.set_from_file(icon_path)
         return False
 
     def reactivar_botones(self):
         # Estado: Desconectado - Cambiar botón a "Conectar"
         self.boton_conectar_desconectar.set_sensitive(True)
-        self.boton_conectar_desconectar.set_label(self.t('btn_connect'))
+        self.boton_label.set_text(self.t('btn_connect'))
         self.conectado = False
         self.actualizar_semaforo('desconectado')
         return False
