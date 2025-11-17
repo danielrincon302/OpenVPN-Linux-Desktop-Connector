@@ -682,8 +682,8 @@ class VentanaVPN(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)  # Eliminar botón maximizar y deshabilitar redimensionamiento
 
-        # Establecer WM_CLASS para que el gestor de ventanas reconozca la aplicación
-        self.set_wmclass("VPN-Linux-Desktop-Connector", "VPN-Linux-Desktop-Connector")
+        # Establecer el nombre de la aplicación para el gestor de ventanas
+        # set_wmclass está deprecado en GTK3, el nombre se toma del título
 
         self.proceso = None
         self.archivo_ovpn = None
@@ -1083,6 +1083,8 @@ class VentanaVPN(Gtk.Window):
         self.boton_conectar_desconectar = Gtk.Button()
         self.boton_conectar_desconectar.set_size_request(-1, 40)  # -1 permite expansión horizontal
         self.boton_conectar_desconectar.connect("clicked", self.on_toggle_conexion_clicked)
+        # Agregar clase CSS para estilos personalizados
+        self.boton_conectar_desconectar.get_style_context().add_class("boton-vpn")
 
         # Contenedor interno del botón con texto e ícono
         boton_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
@@ -1118,21 +1120,8 @@ class VentanaVPN(Gtk.Window):
         self.textview.set_top_margin(5)
         self.textview.set_bottom_margin(5)
 
-        # Agregar clase CSS específica para la consola
+        # Agregar clase CSS específica para la consola (estilos definidos en cada tema)
         self.textview.get_style_context().add_class("console-log")
-
-        # Aplicar colores directamente con override (más prioridad)
-        from gi.repository import Gdk
-
-        # Fondo negro
-        color_fondo = Gdk.RGBA()
-        color_fondo.parse("#000000")
-        self.textview.override_background_color(Gtk.StateFlags.NORMAL, color_fondo)
-
-        # Texto verde brillante
-        color_texto = Gdk.RGBA()
-        color_texto.parse("#00ff00")
-        self.textview.override_color(Gtk.StateFlags.NORMAL, color_texto)
 
         self.textbuffer = self.textview.get_buffer()
 
@@ -1492,6 +1481,46 @@ class VentanaVPN(Gtk.Window):
                 color: #a0aec0;
             }
 
+            /* Estilo específico para botón Conectar VPN - color azul de la barra */
+            button.boton-vpn {
+                background-image: linear-gradient(to bottom, #8dc5e8, #6eb5e0);
+                color: black;
+                border: 1px solid #5a9fd4;
+                border-radius: 4px;
+                padding: 7px 14px;
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:hover {
+                background-image: linear-gradient(to bottom, #a5d4ef, #8dc5e8);
+                border-color: #5a9fd4;
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:active {
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:disabled {
+                background-image: none;
+                background-color: #cbd5e0;
+                color: #a0aec0;
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn label {
+                color: black;
+            }
+
             textview {
                 background-color: #ffffff;
                 color: #2d3748;
@@ -1533,6 +1562,70 @@ class VentanaVPN(Gtk.Window):
 
             tooltip label {
                 color: white;
+            }
+
+            /* Estilos para diálogos - fondo blanco y letras negras FORZADO */
+            dialog.dialog-error,
+            dialog.dialog-error.background,
+            dialog.dialog-error.csd {
+                background-color: #ffffff;
+                background-image: none;
+            }
+
+            dialog.dialog-error box,
+            dialog.dialog-error .dialog-vbox,
+            dialog.dialog-error .dialog-content-area,
+            dialog.dialog-error headerbar,
+            dialog.dialog-error .titlebar {
+                background-color: #ffffff;
+                background-image: none;
+            }
+
+            dialog.dialog-error .dialog-action-area {
+                background-color: transparent;
+                background-image: none;
+            }
+
+            dialog.dialog-error label,
+            dialog.dialog-error .label {
+                color: #000000;
+                background-color: transparent;
+            }
+
+            /* Botón del diálogo - azul tema gerencial */
+            dialog.dialog-error button {
+                background: #6eb5e0;
+                color: black;
+                border: 1px solid #5a9fd4;
+                border-radius: 4px;
+                padding: 8px 16px;
+                min-width: 80px;
+            }
+
+            dialog.dialog-error button:hover {
+                background: #8dc5e8;
+            }
+
+            messagedialog.dialog-error,
+            messagedialog.dialog-error box {
+                background-color: #ffffff;
+            }
+
+            /* Labels del mensaje pero NO los del botón */
+            messagedialog.dialog-error > box label,
+            dialog.dialog-error > box label {
+                background-color: #ffffff;
+                color: #000000;
+            }
+
+            /* IMPORTANTE: Labels dentro de botones SIEMPRE transparentes */
+            messagedialog.dialog-error button label,
+            messagedialog.dialog-error button *,
+            dialog.dialog-error button label,
+            dialog.dialog-error button *,
+            dialog.dialog-error button box {
+                background-color: transparent;
+                background-image: none;
             }
             """
         elif tema == 'minimalist':
@@ -1589,7 +1682,7 @@ class VentanaVPN(Gtk.Window):
 
             button {
                 background-color: #ffffff;
-                color: #333333;
+                color: #000000;
                 border: 1px solid #e0e0e0;
                 border-radius: 2px;
                 padding: 7px 14px;
@@ -1603,6 +1696,48 @@ class VentanaVPN(Gtk.Window):
             button:disabled {
                 background-color: #fafafa;
                 color: #bdbdbd;
+            }
+
+            /* Estilo específico para botón Conectar VPN - mayor especificidad */
+            button.boton-vpn {
+                background-color: #ffffff;
+                background-image: none;
+                color: #000000;
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                padding: 7px 14px;
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:hover {
+                background-color: #f5f5f5;
+                background-image: none;
+                border-color: #999999;
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:active {
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn:disabled {
+                background-color: #fafafa;
+                background-image: none;
+                color: #bdbdbd;
+                outline: none;
+                box-shadow: none;
+            }
+
+            button.boton-vpn label {
+                color: #000000;
             }
 
             textview {
@@ -1645,6 +1780,70 @@ class VentanaVPN(Gtk.Window):
 
             tooltip label {
                 color: white;
+            }
+
+            /* Estilos para diálogos - fondo blanco y letras negras FORZADO */
+            dialog.dialog-error,
+            dialog.dialog-error.background,
+            dialog.dialog-error.csd {
+                background-color: #ffffff;
+                background-image: none;
+            }
+
+            dialog.dialog-error box,
+            dialog.dialog-error .dialog-vbox,
+            dialog.dialog-error .dialog-content-area,
+            dialog.dialog-error headerbar,
+            dialog.dialog-error .titlebar {
+                background-color: #ffffff;
+                background-image: none;
+            }
+
+            dialog.dialog-error .dialog-action-area {
+                background-color: transparent;
+                background-image: none;
+            }
+
+            dialog.dialog-error label,
+            dialog.dialog-error .label {
+                color: #000000;
+                background-color: transparent;
+            }
+
+            /* Botón del diálogo - blanco tema minimalista */
+            dialog.dialog-error button {
+                background: #ffffff;
+                color: #000000;
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                padding: 8px 16px;
+                min-width: 80px;
+            }
+
+            dialog.dialog-error button:hover {
+                background: #f5f5f5;
+            }
+
+            messagedialog.dialog-error,
+            messagedialog.dialog-error box {
+                background-color: #ffffff;
+            }
+
+            /* Labels del mensaje pero NO los del botón */
+            messagedialog.dialog-error > box label,
+            dialog.dialog-error > box label {
+                background-color: #ffffff;
+                color: #000000;
+            }
+
+            /* IMPORTANTE: Labels dentro de botones SIEMPRE transparentes */
+            messagedialog.dialog-error button label,
+            messagedialog.dialog-error button *,
+            dialog.dialog-error button label,
+            dialog.dialog-error button *,
+            dialog.dialog-error button box {
+                background-color: transparent;
+                background-image: none;
             }
             """
         elif tema == 'modern':
@@ -1787,6 +1986,70 @@ class VentanaVPN(Gtk.Window):
                 color: white;
                 font-weight: 500;
             }
+
+            /* Estilos para diálogos - fondo blanco y letras negras FORZADO */
+            dialog.dialog-error,
+            dialog.dialog-error.background,
+            dialog.dialog-error.csd {
+                background-color: #ffffff;
+                background-image: none;
+            }
+
+            dialog.dialog-error box,
+            dialog.dialog-error .dialog-vbox,
+            dialog.dialog-error .dialog-content-area,
+            dialog.dialog-error headerbar,
+            dialog.dialog-error .titlebar {
+                background-color: #ffffff;
+                background-image: none;
+            }
+
+            dialog.dialog-error .dialog-action-area {
+                background-color: transparent;
+                background-image: none;
+            }
+
+            dialog.dialog-error label,
+            dialog.dialog-error .label {
+                color: #000000;
+                background-color: transparent;
+            }
+
+            /* Botón del diálogo - morado tema moderno */
+            dialog.dialog-error button {
+                background: #667eea;
+                color: white;
+                border: 1px solid #5568d3;
+                border-radius: 8px;
+                padding: 8px 16px;
+                min-width: 80px;
+            }
+
+            dialog.dialog-error button:hover {
+                background: #7c8ff0;
+            }
+
+            messagedialog.dialog-error,
+            messagedialog.dialog-error box {
+                background-color: #ffffff;
+            }
+
+            /* Labels del mensaje pero NO los del botón */
+            messagedialog.dialog-error > box label,
+            dialog.dialog-error > box label {
+                background-color: #ffffff;
+                color: #000000;
+            }
+
+            /* IMPORTANTE: Labels dentro de botones SIEMPRE transparentes */
+            messagedialog.dialog-error button label,
+            messagedialog.dialog-error button *,
+            dialog.dialog-error button label,
+            dialog.dialog-error button *,
+            dialog.dialog-error button box {
+                background-color: transparent;
+                background-image: none;
+            }
             """
         elif tema == 'solar':
             css = """
@@ -1921,51 +2184,70 @@ class VentanaVPN(Gtk.Window):
                 text-shadow: 0 0 5px rgba(74, 95, 232, 0.5);
             }
 
-            /* Estilos para diálogos */
-            dialog {
-                background-color: #1a1d2e;
-                color: #e8e8e8;
+            /* Estilos para diálogos - fondo blanco y letras negras FORZADO */
+            dialog.dialog-error,
+            dialog.dialog-error.background,
+            dialog.dialog-error.csd {
+                background-color: #ffffff;
+                background-image: none;
             }
 
-            dialog box {
-                background-color: #1a1d2e;
+            dialog.dialog-error box,
+            dialog.dialog-error .dialog-vbox,
+            dialog.dialog-error .dialog-content-area,
+            dialog.dialog-error headerbar,
+            dialog.dialog-error .titlebar {
+                background-color: #ffffff;
+                background-image: none;
             }
 
-            dialog label {
-                color: #e8e8e8;
-                text-shadow: none;
+            dialog.dialog-error .dialog-action-area {
+                background-color: transparent;
+                background-image: none;
             }
 
-            dialog button {
-                background: linear-gradient(135deg, #734500 0%, #8a5c00 30%, #a15c00 70%, #8a5c00 100%);
+            dialog.dialog-error label,
+            dialog.dialog-error .label {
+                color: #000000;
+                background-color: transparent;
+            }
+
+            /* Botón del diálogo - dorado tema solar */
+            dialog.dialog-error button {
+                background: #a15c00;
                 color: #ffffff;
                 border: 2px solid #8a5c00;
                 border-radius: 8px;
-                padding: 7px 14px;
-                font-weight: 700;
-                font-size: 14px;
-                box-shadow: 0 4px 15px rgba(138, 92, 0, 0.5);
+                padding: 8px 16px;
+                min-width: 80px;
             }
 
-            dialog button:hover {
-                background: linear-gradient(135deg, #8a5c00 0%, #a15c00 30%, #b86e00 70%, #a15c00 100%);
-                border-color: #a15c00;
-                box-shadow: 0 6px 20px rgba(161, 92, 0, 0.6);
+            dialog.dialog-error button:hover {
+                background: #b86e00;
             }
 
-            messagedialog {
-                background-color: #1a1d2e;
+            messagedialog.dialog-error,
+            messagedialog.dialog-error box {
+                background-color: #ffffff;
             }
 
-            messagedialog box {
-                background-color: #1a1d2e;
+            /* Labels del mensaje pero NO los del botón */
+            messagedialog.dialog-error > box label,
+            dialog.dialog-error > box label {
+                background-color: #ffffff;
+                color: #000000;
             }
 
-            messagedialog label {
-                color: #e8e8e8;
+            /* IMPORTANTE: Labels dentro de botones SIEMPRE transparentes */
+            messagedialog.dialog-error button label,
+            messagedialog.dialog-error button *,
+            dialog.dialog-error button label,
+            dialog.dialog-error button *,
+            dialog.dialog-error button box {
+                background-color: transparent;
+                background-image: none;
             }
 
-            /* Estilos para el diálogo Acerca de */
             .about textview {
                 background-color: #ffffff;
                 color: #000000;
@@ -2187,6 +2469,7 @@ class VentanaVPN(Gtk.Window):
                 text=self.t('error_required')
             )
             dialog.format_secondary_text(self.t('error_required_msg'))
+            dialog.get_style_context().add_class("dialog-error")
             dialog.run()
             dialog.destroy()
             return
@@ -2200,6 +2483,7 @@ class VentanaVPN(Gtk.Window):
                 text=self.t('error_ovpn_required')
             )
             dialog.format_secondary_text(self.t('error_ovpn_required_msg'))
+            dialog.get_style_context().add_class("dialog-error")
             dialog.run()
             dialog.destroy()
             return
@@ -2486,6 +2770,8 @@ class VentanaVPN(Gtk.Window):
             text=self.t('error_connection_title')
         )
         dialog.format_secondary_text(self.t('error_connection_msg'))
+        # Agregar clase CSS para estilos personalizados
+        dialog.get_style_context().add_class("dialog-error")
         dialog.run()
         dialog.destroy()
         return False
@@ -2500,6 +2786,7 @@ class VentanaVPN(Gtk.Window):
             text=self.t('tls_error_title')
         )
         dialog.format_secondary_text(self.t('tls_error_msg'))
+        dialog.get_style_context().add_class("dialog-error")
         response = dialog.run()
         dialog.destroy()
 
@@ -2746,6 +3033,7 @@ class VentanaVPN(Gtk.Window):
         }
 
         dialog.format_secondary_text(manual_content.get(self.idioma_actual, manual_content['es']))
+        dialog.get_style_context().add_class("dialog-error")
         dialog.run()
         dialog.destroy()
 
@@ -2854,6 +3142,7 @@ Protokolle werden im Hauptfenster angezeigt.''',
         }
 
         dialog.format_secondary_text(report_text.get(self.idioma_actual, report_text['es']))
+        dialog.get_style_context().add_class("dialog-error")
         dialog.run()
         dialog.destroy()
 
@@ -2955,12 +3244,14 @@ VPN Linux Desktop Connector は無料のオープンソースプロジェクト�
         }
 
         dialog.format_secondary_text(donate_text.get(self.idioma_actual, donate_text['es']))
+        dialog.get_style_context().add_class("dialog-error")
         dialog.run()
         dialog.destroy()
 
     def on_about_clicked(self, widget):
         """Muestra el diálogo 'Acerca de'"""
         about_dialog = Gtk.AboutDialog(transient_for=self, modal=True)
+        about_dialog.get_style_context().add_class("dialog-error")
         about_dialog.set_program_name("VPN Linux Desktop Connector")
         about_dialog.set_version("1.0.0")
         about_dialog.set_copyright("© 2025")
