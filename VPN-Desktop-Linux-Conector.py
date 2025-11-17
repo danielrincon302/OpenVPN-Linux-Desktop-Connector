@@ -1810,8 +1810,12 @@ class VentanaVPN(Gtk.Window):
                 background-color: transparent;
             }
 
-            /* Botón del diálogo - blanco tema minimalista */
-            dialog.dialog-error button {
+            /* Botón del diálogo - SIEMPRE blanco tema minimalista */
+            dialog.dialog-error button,
+            messagedialog.dialog-error button,
+            dialog.dialog-error .dialog-action-area button {
+                background-color: #ffffff;
+                background-image: none;
                 background: #ffffff;
                 color: #000000;
                 border: 1px solid #e0e0e0;
@@ -1820,8 +1824,17 @@ class VentanaVPN(Gtk.Window):
                 min-width: 80px;
             }
 
-            dialog.dialog-error button:hover {
+            dialog.dialog-error button:hover,
+            messagedialog.dialog-error button:hover {
+                background-color: #f5f5f5;
+                background-image: none;
                 background: #f5f5f5;
+            }
+
+            /* Texto del botón siempre negro */
+            dialog.dialog-error button,
+            messagedialog.dialog-error button {
+                color: #000000;
             }
 
             messagedialog.dialog-error,
@@ -1836,7 +1849,7 @@ class VentanaVPN(Gtk.Window):
                 color: #000000;
             }
 
-            /* IMPORTANTE: Labels dentro de botones SIEMPRE transparentes */
+            /* IMPORTANTE: Labels dentro de botones SIEMPRE transparentes con texto negro */
             messagedialog.dialog-error button label,
             messagedialog.dialog-error button *,
             dialog.dialog-error button label,
@@ -1844,6 +1857,13 @@ class VentanaVPN(Gtk.Window):
             dialog.dialog-error button box {
                 background-color: transparent;
                 background-image: none;
+                color: #000000;
+            }
+
+            /* Forzar colores en botones del diálogo minimalista */
+            dialog.dialog-error button label,
+            messagedialog.dialog-error button label {
+                color: #000000;
             }
             """
         elif tema == 'modern':
