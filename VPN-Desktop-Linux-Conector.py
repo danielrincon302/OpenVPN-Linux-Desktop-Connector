@@ -2288,17 +2288,24 @@ class VentanaVPN(Gtk.Window):
                 with os.fdopen(fd, 'w') as f:
                     f.write(f"{usuario}\n{password}\n")
 
-                # Construir comando base
-                comando = f"sudo openvpn --config \"{self.archivo_ovpn}\" --auth-user-pass \"{temp_config}\""
+                # Construir comando base con verbosidad para ver la salida en tiempo real
+                comando = f"sudo openvpn --config \"{self.archivo_ovpn}\" --auth-user-pass \"{temp_config}\" --verb 3"
 
                 # Agregar parámetros TLS si está forzado
                 if self.force_tls:
                     comando += ' --tls-version-max 1.0 --tls-cipher "DEFAULT:@SECLEVEL=0" --data-ciphers AES-128-CBC'
+
+                # Mostrar el comando en la consola (ocultando credenciales)
+                comando_visible = comando.replace(temp_config, "***credentials***")
+                GLib.idle_add(self.agregar_texto, f"\n=== Ejecutando comando ===\n{comando_visible}\n\n")
             except Exception as e:
                 GLib.idle_add(self.agregar_texto, f"{self.t('error')} {e}\n")
                 if temp_config and os.path.exists(temp_config):
                     os.unlink(temp_config)
                 return
+
+            # Mensaje de inicio
+            GLib.idle_add(self.agregar_texto, "=== Iniciando OpenVPN ===\n")
 
             self.proceso = subprocess.Popen(
                 comando,
@@ -2306,7 +2313,8 @@ class VentanaVPN(Gtk.Window):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
-                bufsize=1
+                bufsize=1,
+                universal_newlines=True
             )
 
             # Variables para detectar errores
@@ -2525,11 +2533,11 @@ class VentanaVPN(Gtk.Window):
 
         # Determinar nombre del archivo según estado
         if estado == 'conectado':
-            nombre_archivo = f"{prefijo}CandadoConectado16x16.svg"
+            nombre_archivo = f"{prefijo}CandadoConectado16x16.png"
         elif estado in ['conectando', 'desconectando']:
-            nombre_archivo = f"{prefijo}CandadoDesConectado16x16.svg"
+            nombre_archivo = f"{prefijo}CandadoDesConectado16x16.png"
         else:  # desconectado
-            nombre_archivo = f"{prefijo}CandadoDesConectado16x16.svg"
+            nombre_archivo = f"{prefijo}CandadoDesConectado16x16.png"
 
         return os.path.join(os.path.dirname(__file__), "icons", nombre_archivo)
 
