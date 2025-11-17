@@ -1159,6 +1159,10 @@ class VentanaVPN(Gtk.Window):
         self.aplicar_tema(self.tema_actual)
         self.actualizar_marcador_tema()
 
+        # Actualizar el ícono del semáforo según el tema cargado
+        icon_path = self.obtener_icono_por_tema('desconectado')
+        self.semaforo_image.set_from_file(icon_path)
+
         # Actualizar visibilidad del log de consola según configuración
         self.actualizar_visibilidad_console_log()
 
