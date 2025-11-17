@@ -66,6 +66,27 @@ Urreste García, L. A., Capote Casas, F. E., Castellanos Muriel, J. A., & Rincó
 sh install.sh
 ```
 
+### Configuración de sudo para OpenVPN
+
+La primera vez que ejecutes la aplicación desde el escritorio, OpenVPN necesita privilegios de administrador. Para evitar que solicite contraseña cada vez, ejecuta:
+
+```bash
+cd ~/VPN-Desktop-Linux-Conector
+sudo bash setup-sudo.sh
+```
+
+Este script configura sudo para permitir ejecutar OpenVPN sin contraseña **solo para tu usuario**. Es seguro y solo afecta a OpenVPN.
+
+**¿Qué hace el script?**
+- Crea un archivo en `/etc/sudoers.d/vpn-linux-desktop-connector`
+- Permite ejecutar `openvpn` sin contraseña solo para tu usuario
+- Valida la configuración automáticamente
+
+**Para revertir la configuración:**
+```bash
+sudo rm /etc/sudoers.d/vpn-linux-desktop-connector
+```
+
 ## Instalación Manual
 
 Si prefieres instalar manualmente, copia y pega el siguiente código:

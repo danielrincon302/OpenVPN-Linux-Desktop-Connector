@@ -45,6 +45,8 @@ TRADUCCIONES = {
         'no': 'No',
         'tls_error_title': 'Error de TLS Deprecado',
         'tls_error_msg': 'Se detectó un error de TLS deprecado.\n\n¿Desea activar el uso de TLS 1.0 con Cifrado AES-128-CBC?\n\nEsto puede resolver problemas de compatibilidad con servidores antiguos.',
+        'sudo_error_title': 'Configuración de Sudo Requerida',
+        'sudo_error_msg': 'OpenVPN requiere privilegios de administrador.\n\nPara evitar que solicite contraseña cada vez, ejecute:\n\ncd ~/VPN-Desktop-Linux-Conector\nsudo bash setup-sudo.sh\n\nEsto es seguro y solo afecta a OpenVPN.',
         'menu_help': 'Ayuda',
         'help_manual': 'Manual de VPN Linux Desktop Connector',
         'help_report_bug': 'Informar de fallo',
@@ -119,6 +121,8 @@ TRADUCCIONES = {
         'no': 'No',
         'tls_error_title': 'Deprecated TLS Error',
         'tls_error_msg': 'A deprecated TLS error was detected.\n\nDo you want to enable TLS 1.0 with AES-128-CBC Encryption?\n\nThis may resolve compatibility issues with older servers.',
+        'sudo_error_title': 'Sudo Configuration Required',
+        'sudo_error_msg': 'OpenVPN requires administrator privileges.\n\nTo avoid password prompt each time, run:\n\ncd ~/VPN-Desktop-Linux-Conector\nsudo bash setup-sudo.sh\n\nThis is safe and only affects OpenVPN.',
         'menu_help': 'Help',
         'help_manual': 'VPN Linux Desktop Connector Manual',
         'help_report_bug': 'Report a Bug',
@@ -193,6 +197,8 @@ TRADUCCIONES = {
         'no': '否',
         'tls_error_title': 'TLS 已弃用错误',
         'tls_error_msg': '检测到 TLS 已弃用错误。\n\n是否要启用 TLS 1.0 和 AES-128-CBC 加密？\n\n这可以解决与旧服务器的兼容性问题。',
+        'sudo_error_title': '需要 Sudo 配置',
+        'sudo_error_msg': 'OpenVPN 需要管理员权限。\n\n为避免每次都提示密码，请运行：\n\ncd ~/VPN-Desktop-Linux-Conector\nsudo bash setup-sudo.sh\n\n这是安全的，只影响 OpenVPN。',
         'menu_help': '帮助',
         'help_manual': 'VPN Linux Desktop Connector 手册',
         'help_report_bug': '报告错误',
@@ -267,6 +273,8 @@ TRADUCCIONES = {
         'no': 'Não',
         'tls_error_title': 'Erro de TLS Deprecado',
         'tls_error_msg': 'Um erro de TLS deprecado foi detectado.\n\nDeseja ativar o uso de TLS 1.0 com Criptografia AES-128-CBC?\n\nIsso pode resolver problemas de compatibilidade com servidores antigos.',
+        'sudo_error_title': 'Configuração de Sudo Necessária',
+        'sudo_error_msg': 'OpenVPN requer privilégios de administrador.\n\nPara evitar solicitação de senha cada vez, execute:\n\ncd ~/VPN-Desktop-Linux-Conector\nsudo bash setup-sudo.sh\n\nIsso é seguro e afeta apenas o OpenVPN.',
         'menu_help': 'Ajuda',
         'help_manual': 'Manual do VPN Linux Desktop Connector',
         'help_report_bug': 'Reportar um Erro',
@@ -341,6 +349,8 @@ TRADUCCIONES = {
         'no': 'Non',
         'tls_error_title': 'Erreur TLS Déprécié',
         'tls_error_msg': 'Une erreur TLS déprécié a été détectée.\n\nVoulez-vous activer TLS 1.0 avec le chiffrement AES-128-CBC?\n\nCela peut résoudre les problèmes de compatibilité avec les serveurs anciens.',
+        'sudo_error_title': 'Configuration Sudo Requise',
+        'sudo_error_msg': 'OpenVPN nécessite des privilèges d\'administrateur.\n\nPour éviter la demande de mot de passe à chaque fois, exécutez:\n\ncd ~/VPN-Desktop-Linux-Conector\nsudo bash setup-sudo.sh\n\nC\'est sécurisé et affecte uniquement OpenVPN.',
         'menu_help': 'Aide',
         'help_manual': 'Manuel de VPN Linux Desktop Connector',
         'help_report_bug': 'Signaler un Bug',
@@ -415,6 +425,8 @@ TRADUCCIONES = {
         'no': 'Nein',
         'tls_error_title': 'Veralteter TLS-Fehler',
         'tls_error_msg': 'Ein veralteter TLS-Fehler wurde erkannt.\n\nMöchten Sie TLS 1.0 mit AES-128-CBC-Verschlüsselung aktivieren?\n\nDies kann Kompatibilitätsprobleme mit älteren Servern lösen.',
+        'sudo_error_title': 'Sudo-Konfiguration Erforderlich',
+        'sudo_error_msg': 'OpenVPN benötigt Administratorrechte.\n\nUm Passwortabfrage zu vermeiden, führen Sie aus:\n\ncd ~/VPN-Desktop-Linux-Conector\nsudo bash setup-sudo.sh\n\nDies ist sicher und betrifft nur OpenVPN.',
         'menu_help': 'Hilfe',
         'help_manual': 'VPN Linux Desktop Connector Handbuch',
         'help_report_bug': 'Fehler melden',
@@ -489,6 +501,8 @@ TRADUCCIONES = {
         'no': 'いいえ',
         'tls_error_title': '非推奨TLSエラー',
         'tls_error_msg': '非推奨のTLSエラーが検出されました。\n\nAES-128-CBC暗号化でTLS 1.0を有効にしますか？\n\nこれにより、古いサーバーとの互換性の問題が解決される場合があります。',
+        'sudo_error_title': 'Sudo設定が必要です',
+        'sudo_error_msg': 'OpenVPNには管理者権限が必要です。\n\n毎回パスワードを求められないようにするには、次を実行してください：\n\ncd ~/VPN-Desktop-Linux-Conector\nsudo bash setup-sudo.sh\n\nこれは安全で、OpenVPNにのみ影響します。',
         'menu_help': 'ヘルプ',
         'help_manual': 'VPN Linux Desktop Connector マニュアル',
         'help_report_bug': 'バグを報告',
@@ -2629,6 +2643,7 @@ class VentanaVPN(Gtk.Window):
             error_autenticacion = False
             error_archivo = False
             error_tls = False
+            error_sudo = False
             conectado_exitosamente = False
 
             # Variables para timeout y reconexión
@@ -2695,6 +2710,10 @@ class VentanaVPN(Gtk.Window):
                                            "tls handshake failed" in linea.lower()):
                     error_tls = True
 
+                # Detectar errores de sudo (contraseña requerida)
+                if "sudo: a password is required" in linea or "sudo: 1 incorrect password" in linea or "[sudo] password for" in linea:
+                    error_sudo = True
+
             # Esperar a que termine
             self.proceso.wait()
 
@@ -2703,8 +2722,12 @@ class VentanaVPN(Gtk.Window):
             timeout_alcanzado = not conectado_exitosamente and tiempo_total >= timeout_conexion
             reconexiones_excedidas = reconexiones_detectadas >= max_reconexiones
 
+            # Si hubo error de sudo, mostrar diálogo específico
+            if error_sudo:
+                GLib.idle_add(self.agregar_texto, "\n=== Error: Se requiere configurar sudo ===\n")
+                GLib.idle_add(self.mostrar_dialogo_sudo)
             # Si hubo timeout o demasiadas reconexiones
-            if timeout_alcanzado or reconexiones_excedidas:
+            elif timeout_alcanzado or reconexiones_excedidas:
                 GLib.idle_add(self.agregar_texto, self.t('connection_error'))
                 GLib.idle_add(self.mostrar_error_conexion)
             # Si hubo error de TLS, mostrar diálogo para activar TLS 1.0
@@ -2819,6 +2842,21 @@ class VentanaVPN(Gtk.Window):
             self.activar_tls_desde_error()
             self.agregar_texto(f"\n=== TLS 1.0/AES-128-CBC {self.t('yes')} ===\n")
 
+        return False
+
+    def mostrar_dialogo_sudo(self):
+        """Muestra un diálogo informando sobre la configuración de sudo necesaria"""
+        dialog = Gtk.MessageDialog(
+            transient_for=self,
+            flags=0,
+            message_type=Gtk.MessageType.ERROR,
+            buttons=Gtk.ButtonsType.OK,
+            text=self.t('sudo_error_title')
+        )
+        dialog.format_secondary_text(self.t('sudo_error_msg'))
+        dialog.get_style_context().add_class("dialog-error")
+        dialog.run()
+        dialog.destroy()
         return False
 
     def agregar_texto(self, texto):
