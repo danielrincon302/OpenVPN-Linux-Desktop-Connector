@@ -179,18 +179,68 @@ La aplicación incluye un ícono de bandeja del sistema que aparece automáticam
 
 ```
 VPN-Desktop-Linux-Connector/
-├── VPN-Desktop-Linux-Conector.py    # Aplicación principal
-├── README.md                        # Este archivo
-├── icons/                           # Íconos de la aplicación
-│   ├── VPN-LDC_16x16.svg           # Ícono 16x16 (reservado)
-│   ├── VPN-LDC_22x22.svg           # Ícono 22x22 (reservado)
-│   ├── VPN-LDC_24x24.svg           # ⭐ Bandeja del sistema
-│   └── VPN-LDC_32x32.svg           # ⭐ Ventana principal y About
-├── config.txt                       # Credenciales (generado automáticamente)
-├── idioma.txt                       # Idioma seleccionado
-├── tema.txt                         # Tema seleccionado
-└── .vpn_key                         # Clave de encriptación (oculto)
+├── VPN-Desktop-Linux-Conector.py          # ⭐ Aplicación principal GTK3
+├── README.md                              # Documentación del proyecto
+├── requirements.txt                       # Dependencias de Python
+├── install.sh                             # Script de instalación rápida
+├── setup-sudo.sh                          # Configuración de permisos sudo para OpenVPN
+├── Run-VPN-Desktop-Linux-Conector.desktop # Archivo .desktop para lanzador de aplicaciones
+│
+├── icons/                                 # Íconos de la aplicación
+│   ├── ico-index.png                     # Logo principal (307x333px)
+│   ├── VPN-LDC_16x16.svg                 # Ícono 16x16 para escalado
+│   ├── VPN-LDC_22x22.svg                 # Ícono 22x22 para escalado
+│   ├── VPN-LDC_24x24.svg                 # ⭐ Bandeja del sistema
+│   ├── VPN-LDC_32x32.svg                 # ⭐ Ventana principal y diálogo About
+│   ├── BCandadoConectado16x16.png        # Candado conectado (tema claro)
+│   ├── BCandadoDesConectado16x16.png     # Candado desconectado (tema claro)
+│   ├── WCandadoConectado16x16.png        # Candado conectado (tema oscuro)
+│   └── WCandadoDesConectado16x16.png     # Candado desconectado (tema oscuro)
+│
+├── img/                                   # Imágenes para documentación
+│   ├── header.png                        # Cabecera del README
+│   ├── TaskMenu.png                      # Captura del menú de bandeja
+│   ├── i001Consola.png                   # Captura de consola de logs
+│   ├── i001Gerencial.png                 # Tema Gerencial
+│   ├── i001Minimalista.png               # Tema Minimalista
+│   ├── i001Moderno.png                   # Tema Moderno
+│   └── i001SistemaSolar.png              # Tema Sistema Solar
+│
+└── Archivos generados automáticamente:
+    ├── config.txt                         # Credenciales VPN encriptadas (autogenerado)
+    ├── .vpn_key                           # Clave de encriptación Fernet (autogenerado, oculto)
+    ├── idioma.txt                         # Idioma seleccionado (autogenerado)
+    ├── tema.txt                           # Tema visual seleccionado (autogenerado)
+    ├── tls_config.txt                     # Configuración TLS 1.0 (autogenerado)
+    ├── anti_suspend_config.txt            # Estado modo anti-suspensión (autogenerado)
+    └── console_log_config.txt             # Visibilidad del log de consola (autogenerado)
 ```
+
+### Descripción de Archivos Principales
+
+| Archivo | Propósito |
+|---------|-----------|
+| `VPN-Desktop-Linux-Conector.py` | Aplicación principal con interfaz GTK3. Gestiona conexión VPN, interfaz gráfica, temas, idiomas y bandeja del sistema. |
+| `install.sh` | Script de instalación automática. Descarga el proyecto, copia el lanzador al escritorio y configura permisos. |
+| `setup-sudo.sh` | Configura permisos sudo para ejecutar OpenVPN sin contraseña. Crea archivo en `/etc/sudoers.d/`. |
+| `Run-VPN-Desktop-Linux-Conector.desktop` | Lanzador de aplicación para escritorios Linux. Define ícono, comando de ejecución y categoría. |
+| `requirements.txt` | Lista de dependencias Python: `cryptography`, `requests` (opcional). |
+
+### Archivos de Configuración (Autogenerados)
+
+Estos archivos se crean automáticamente cuando usas la aplicación:
+
+| Archivo | Contenido |
+|---------|-----------|
+| `config.txt` | Credenciales VPN encriptadas (usuario, contraseña, ruta OVPN) usando Fernet. |
+| `.vpn_key` | Clave de encriptación única generada por usuario y máquina. **No compartir**. |
+| `idioma.txt` | Código del idioma seleccionado (es, en, zh, pt, fr, de, ja). |
+| `tema.txt` | Código del tema visual (gerencial, minimalista, moderno, sistema-solar). |
+| `tls_config.txt` | Estado de configuración TLS 1.0 (true/false). |
+| `anti_suspend_config.txt` | Estado del modo anti-suspensión (true/false). |
+| `console_log_config.txt` | Visibilidad del log de consola OpenVPN (true/false). |
+
+**Nota**: Todos los archivos de configuración tienen permisos restrictivos (600) para proteger información sensible.
 
 ## Íconos Personalizados
 
