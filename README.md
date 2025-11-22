@@ -6,7 +6,9 @@ Una aplicación de escritorio moderna para gestionar conexiones VPN en Linux usa
 
 ## Autores
 
-Urreste García, L. A., Capote Casas, F. E., Castellanos Muriel, J. A., & Rincón Brito, C. D. (2025). VPN Linux Desktop Connector (v1.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.10293847
+Urreste García, L. A., Capote Casas, F. E., Castellanos Muriel, J. A., & Rincón Brito, C. D. (2025). VPN Linux Desktop Connector (v1.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.17676938
+
+[![DOI](https://zenodo.org/badge/1086012629.svg)](https://doi.org/10.5281/zenodo.17676938)
 
 ## Características
 
