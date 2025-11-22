@@ -94,7 +94,7 @@ sudo rm /etc/sudoers.d/vpn-linux-desktop-connector
 Si prefieres instalar manualmente, copia y pega el siguiente código:
 
 ```bash
-cd ~ && curl -L https://github.com/danielrincon302/VPN-Linux-Desktop-Connector/archive/refs/heads/main.zip -o vpn-temp.zip &&
+cd ~ && curl -L https://github.com/danielrincon302/OpenVPN-Linux-Desktop-Connector/archive/refs/heads/main.zip -o vpn-temp.zip &&
 unzip -o -q vpn-temp.zip && rm -rf VPN-Desktop-Linux-Conector 2>/dev/null &&
 mv VPN-Linux-Desktop-Connector-main VPN-Desktop-Linux-Conector &&
 rm vpn-temp.zip && cp ~/VPN-Desktop-Linux-Conector/Run-VPN-Desktop-Linux-Conector.desktop "$(xdg-user-dir DESKTOP)"/ &&

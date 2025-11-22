@@ -3329,7 +3329,7 @@ VPN Linux Desktop Connector は無料のオープンソースプロジェクト�
         }
 
         about_dialog.set_comments(about_text.get(self.idioma_actual, about_text['es']))
-        about_dialog.set_website("https://github.com/danielrincon302/VPN-Linux-Desktop-Connector")
+        about_dialog.set_website("https://github.com/danielrincon302/OpenVPN-Linux-Desktop-Connector")
         about_dialog.set_website_label("GitHub")
         about_dialog.set_license("GPL 3.0")
 
